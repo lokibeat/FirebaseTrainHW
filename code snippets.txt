@@ -1,0 +1,3 @@
+database = firebase.database();
+var ref=database.ref('trains');
+ref.on('value',getData)
