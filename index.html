@@ -1,12 +1,16 @@
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Train Schedule</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Train Schedule</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+        <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+        <!-- <script src="/assets/js/main.js"></script> couldn't get this to work -->
+    </head>
 <body>
     <style>
     h3, p, jumbotron {
@@ -72,92 +76,64 @@
           </form>
     </div>
 </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
-    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
-    <script>
-      // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyBww4qLWH9y7u2_FdB4_dzEfQjCoSLyZmA",
-        authDomain: "trainschedulehw-333fb.firebaseapp.com",
-        databaseURL: "https://trainschedulehw-333fb.firebaseio.com",
-        projectId: "trainschedulehw-333fb",
-        storageBucket: "",
-        messagingSenderId: "408985029619"
-      };
-      $(document).ready();
-      firebase.initializeApp(config);
-      database = firebase.database();
+<script>
+// Initialize Firebase
+var config = {
+    apiKey: "AIzaSyBww4qLWH9y7u2_FdB4_dzEfQjCoSLyZmA",
+    authDomain: "trainschedulehw-333fb.firebaseapp.com",
+    databaseURL: "https://trainschedulehw-333fb.firebaseio.com",
+    projectId: "trainschedulehw-333fb",
+    storageBucket: "",
+    messagingSenderId: "408985029619"
+  };
+  $(document).ready();
+  firebase.initializeApp(config);
+  database = firebase.database();
 // <!-- get train info into database -->
-       $("#add-train").on("click", function(event) {
-      // Don't refresh the page!
-      event.preventDefault();
-      trainName = $("#train-name").val().trim();
-      destination = $("#destination").val().trim();
-      trainTime = $("#first-train-time").val().trim();
-      trainFrequency = $("#frequency").val().trim();
-      
-      
-    
+   $("#add-train").on("click", function(event) {
+  // Don't refresh the page!
+  event.preventDefault();
+  trainName = $("#train-name").val().trim();
+  destination = $("#destination").val().trim();
+  trainTime = $("#first-train-time").val().trim();
+  trainFrequency = $("#frequency").val().trim();
+  
+  
+
 // <!-- Clear Form -->
 $("#destination").val("");
 $('#train-name').val("");
 $('#first-train-time').val("");
 $('#frequency').val("");
 
-// var firstTime = trainTime;
 
-// First Time (pushed back 1 year to make sure it comes before current time)
-// var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
-// console.log(firstTimeConverted);
 
-// Current Time
-// var currentTime = moment();
-// console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
-
-// Difference between the times
-// var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-// console.log("DIFFERENCE IN TIME: " + diffTime);
-
-// Time apart (remainder)
-// var tRemainder = diffTime % tFrequency;
-// console.log(tRemainder);
-
-// Minute Until Train
-// var tMinutesTillTrain = tFrequency - tRemainder;
-// console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
-
-// Next Train
-// var nextTrain = moment().add(tMinutesTillTrain, "minutes").format("hh:mm");
-// console.log("ARRIVAL TIME: " + moment(nextTrain));
-
-        var newTrainInfo = {
-      trainName: trainName,
-      destination: destination,
-      trainTime: trainTime,
-      trainFrequency: trainFrequency
-      }
-    //   console.log(newTrainInfo);
-      
-
-      database.ref().push(newTrainInfo);
-        })
-    
+    var newTrainInfo = {
+  trainName: trainName,
+  destination: destination,
+  trainTime: trainTime,
+  trainFrequency: trainFrequency
+  }
+//   console.log(newTrainInfo);
   
-    
-    database.ref().on("child_added", function(snapshot) {
- 
-    // show value to ensure database is working
-    // function populateTable(Snapshot) {
-    var trainData = snapshot.val();
-    console.log(trainData);
-    
-    var trainName = snapshot.val().trainName;
-    var destination = snapshot.val().destination;
-    var trainFrequency = snapshot.val().trainFrequency;
-    var firstTime = snapshot.val().trainTime;
-    var tFrequency = trainFrequency;
+
+  database.ref().push(newTrainInfo);
+    })
+
+
+
+database.ref().on("child_added", function(snapshot) {
+
+// show value to ensure database is working
+// function populateTable(Snapshot) {
+var trainData = snapshot.val();
+console.log(trainData);
+
+var trainName = snapshot.val().trainName;
+var destination = snapshot.val().destination;
+var trainFrequency = snapshot.val().trainFrequency;
+var firstTime = snapshot.val().trainTime;
+var tFrequency = trainFrequency;
 
 // First Time (pushed back 1 year to make sure it comes before current time)
 var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
@@ -183,21 +159,10 @@ console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
 var nextTrain = moment().add(tMinutesTillTrain, "minutes").format("hh:mm");
 // console.log("ARRIVAL TIME: " + moment(nextTrain));
 
-        $("#train-list-items").append("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" +
-      trainFrequency + "</td><td>" + nextTrain + "</td><td>" + tMinutesTillTrain + "</td><td>");
+    $("#train-list-items").append("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" +
+  trainFrequency + "</td><td>" + nextTrain + "</td><td>" + tMinutesTillTrain + "</td><td>");
 })
-
-
-
-
-    // }
-    // //Show Info is correct
-    // console.log(trainName);
-    // console.log(destination);
-    // console.log(trainTime);
-    // console.log(trainFrequency);
-    // populateTable();
-    // });
 </script>
+      
 </body>
 </html>
